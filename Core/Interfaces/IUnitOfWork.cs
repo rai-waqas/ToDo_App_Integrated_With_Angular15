@@ -10,7 +10,6 @@ namespace Core.Interfaces
     {
         ITaskRepository Tasks { get; }
         IUserRepository Users { get; }
-        ITagRepository Tags { get; }
         Task<int> CompleteAsync();
     }
 }

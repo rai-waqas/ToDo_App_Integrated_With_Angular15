@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using AutoMapper;
+using Core.AuthModels;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Task = Core.Models.Task;
@@ -11,13 +12,30 @@ namespace ToDo_WebApi__Presentation_.Controllers
     public class TaskController : ControllerBase
     {
         private readonly ITaskService _taskService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public TaskController(ITaskService taskService, IMapper mapper)
+        public TaskController(IAuthService authService, ITaskService taskService, IMapper mapper)
         {
+            _authService = authService;
             _taskService = taskService;
             _mapper = mapper;
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            try
+            {
+                var authResponse = await _authService.AuthenticateAsync(request);
+                return Ok(authResponse);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllTasks()

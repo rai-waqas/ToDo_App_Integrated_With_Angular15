@@ -9,12 +9,10 @@ namespace Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Tag, TagDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Task, TaskDto>().ReverseMap();
             CreateMap<UserCreateDto, User>().ReverseMap();
             CreateMap<UserUpdateDto, User>().ReverseMap();
-            CreateMap<TagCreateDto, Tag>().ReverseMap();
             CreateMap<TaskCreateDto, Task>().ReverseMap();
         }
     }

@@ -11,12 +11,10 @@ namespace Infrastructure.Repositories
             _context = context;
             Tasks = new TaskRepository(_context);
             Users = new UserRepository(_context);
-            Tags = new TagRepository(_context);
         }
 
         public ITaskRepository Tasks { get; private set; }
         public IUserRepository Users { get; private set; }
-        public ITagRepository Tags { get; private set; }
 
         public async Task<int> CompleteAsync()
         {

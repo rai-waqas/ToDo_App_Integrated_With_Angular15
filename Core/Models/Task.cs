@@ -7,7 +7,7 @@ namespace Core.Models
     {
         public Task()
         {
-            Tags = new HashSet<Tag>();
+            
         }
 
         public int Id { get; set; }
@@ -17,9 +17,7 @@ namespace Core.Models
         public DateTime? DueDate { get; set; }
         public string Priority { get; set; } = null!;
         public bool Completed { get; set; }
-
+        public string? Tags { get; set; }
         public virtual User? User { get; set; }
-
-        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

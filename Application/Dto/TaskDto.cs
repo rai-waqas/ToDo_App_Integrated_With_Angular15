@@ -9,6 +9,6 @@
         public string? Priority { get; set; }
         public bool Completed { get; set; }
         public int UserId { get; set; }
-        public List<int> TagIds { get; set; } = new List<int>();
+        public string? Tags { get; set; }
     }
 }

@@ -15,25 +15,11 @@ namespace Infrastructure.DataContext
         {
         }
 
-        public virtual DbSet<Tag> Tags { get; set; } = null!;
         public virtual DbSet<Task> Tasks { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tag>(entity =>
-            {
-                entity.ToTable("tags");
-
-                entity.HasIndex(e => e.Name, "tags_name_key")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
-            });
 
             modelBuilder.Entity<Task>(entity =>
             {
@@ -56,6 +42,8 @@ namespace Infrastructure.DataContext
                     .HasColumnName("priority")
                     .HasDefaultValueSql("'low'::character varying");
 
+                entity.Property(e => e.Tags).HasColumnName("tags");
+
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.User)
@@ -63,23 +51,6 @@ namespace Infrastructure.DataContext
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("tasks_user_id_fkey");
-
-                entity.HasMany(d => d.Tags)
-                    .WithMany(p => p.Tasks)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "TaskTags",
-                        l => l.HasOne<Tag>().WithMany().HasForeignKey("TagId").HasConstraintName("tasktags_tag_id_fkey"),
-                        r => r.HasOne<Task>().WithMany().HasForeignKey("TaskId").HasConstraintName("tasktags_task_id_fkey"),
-                        j =>
-                        {
-                            j.HasKey("TaskId", "TagId").HasName("tasktags_pkey");
-
-                            j.ToTable("tasktags");
-
-                            j.IndexerProperty<int>("TaskId").HasColumnName("task_id");
-
-                            j.IndexerProperty<int>("TagId").HasColumnName("tag_id");
-                        });
             });
 
             modelBuilder.Entity<User>(entity =>
