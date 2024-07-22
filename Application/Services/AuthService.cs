@@ -32,7 +32,7 @@ public class AuthService : IAuthService
         return new AuthResponse
         {
             Token = token,
-            User = user
+            userId = user.Id
         };
     }
 

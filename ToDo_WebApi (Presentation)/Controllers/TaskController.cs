@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.AuthModels;
 using Core.Interfaces;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Task = Core.Models.Task;
 
@@ -36,6 +37,23 @@ namespace ToDo_WebApi__Presentation_.Controllers
             }
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetTasksByUserId(int userId)
+        {
+            try
+            {
+                var tasks = await _taskService.GetTasksByUserId(userId);
+                if (tasks == null)
+                {
+                    return NotFound("No tasks found.");
+                }
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching tasks.");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllTasks()
@@ -73,7 +91,7 @@ namespace ToDo_WebApi__Presentation_.Controllers
 
             var task = _mapper.Map<Task>(taskCreateDto);
             await _taskService.AddTaskAsync(task);
-            return Ok("Task Created Successfully");
+            return Ok(new { message = "Task Created Successfully", taskId = task.Id });
         }
 
         [HttpPut("{id}")]

@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<IEnumerable<Task>> GetTasksByUserId(int userId)
         {
-            return await _context.Set<Task>()
+            return await _context.Tasks
                                  .Where(t => t.UserId == userId)
                                  .ToListAsync();
         }

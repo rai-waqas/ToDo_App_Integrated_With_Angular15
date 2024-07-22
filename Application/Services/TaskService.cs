@@ -55,5 +55,10 @@ namespace Application.Services
             await _unitOfWork.Tasks.DeleteAsync(id);
             await _unitOfWork.CompleteAsync();
         }
+
+        public Task<IEnumerable<Core.Models.Task>> GetTasksByUserId(int userId)
+        {
+            return _unitOfWork.Tasks.GetTasksByUserId(userId);
+        }
     }
 }
