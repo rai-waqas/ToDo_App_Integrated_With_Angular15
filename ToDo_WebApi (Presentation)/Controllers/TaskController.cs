@@ -49,7 +49,7 @@ namespace ToDo_WebApi__Presentation_.Controllers
                 }
                 return Ok(tasks);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while fetching tasks.");
             }

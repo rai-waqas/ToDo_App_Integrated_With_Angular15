@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ToDo_WebApi__Presentation_.Controllers
 {
@@ -61,7 +62,7 @@ namespace ToDo_WebApi__Presentation_.Controllers
 
             var user = _mapper.Map<User>(userCreateDto);
             await _userService.AddUserAsync(user);
-            return Ok("User Created Successfully");
+            return Ok(new { message = "User Created Successfully" });
         }
 
         [HttpPut("{id}")]
