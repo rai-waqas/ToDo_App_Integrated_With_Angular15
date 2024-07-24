@@ -26,7 +26,11 @@ public class AuthService : IAuthService
     {
         var user = await _unitOfWork.Users.GetByEmailAsync(request.Email);
 
-        if (user == null || !VerifyPassword(request.Password, user.Password))
+        #region VerifyPassword
+        var isPasswordCorrect = request.Password == user?.Password;
+        #endregion
+
+        if (user == null || !isPasswordCorrect)
         {
             throw new UnauthorizedAccessException("Invalid credentials.");
         }
@@ -39,12 +43,7 @@ public class AuthService : IAuthService
             Token = token,
             User = mappedUser
         };
-    }
-
-    private bool VerifyPassword(string inputPassword, string storedPasswordHash)
-    {
-        return inputPassword == storedPasswordHash;
-    }
+    } 
 
     private string GenerateJwtToken(User user)
     {

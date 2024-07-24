@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.AuthModels;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Task = Core.Models.Task;
 
@@ -36,6 +37,7 @@ namespace ToDo_WebApi__Presentation_.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTasksByUserId(int userId)
         {

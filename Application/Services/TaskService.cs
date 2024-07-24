@@ -39,6 +39,7 @@ namespace Application.Services
                 existingTask.DueDate = task.DueDate;
                 existingTask.Priority = task.Priority;
                 existingTask.Completed = task.Completed;
+                existingTask.Tags = task.Tags;
                 await _unitOfWork.CompleteAsync();
             }
             else
