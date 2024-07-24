@@ -6,16 +6,20 @@ using Core.Models;
 using Core.Interfaces;
 using Core.AuthModels;
 using Microsoft.Extensions.Configuration;
+using Core.AuthDto;
+using AutoMapper;
 
 public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly string _jwtSecret;
+    private readonly IMapper _mapper;
 
-    public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration)
+    public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _jwtSecret = configuration["Jwt:Secret"];
+        _mapper = mapper;
     }
 
     public async Task<AuthResponse> AuthenticateAsync(LoginRequest request)
@@ -29,11 +33,11 @@ public class AuthService : IAuthService
 
 
         var token = GenerateJwtToken(user);
-
+        var mappedUser = _mapper.Map<AuthResponseDto>(user);
         return new AuthResponse
         {
             Token = token,
-            userId = user.Id
+            User = mappedUser
         };
     }
 
@@ -59,6 +63,30 @@ public class AuthService : IAuthService
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    public ClaimsPrincipal DecodeJwtToken(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        try
+        {
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSecret))
+            };
+
+            // Validate token and get principal
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+
+            return principal;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Failed to decode token.", ex);
+        }
     }
 
 }

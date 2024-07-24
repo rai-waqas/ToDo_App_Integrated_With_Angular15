@@ -1,9 +1,10 @@
-﻿using Application.DTOs;
+﻿using Application.ResponseDtos;
+using Application.DTOs;
 using AutoMapper;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace ToDo_WebApi__Presentation_.Controllers
 {
@@ -18,6 +19,21 @@ namespace ToDo_WebApi__Presentation_.Controllers
         {
             _userService = userService;
             _mapper = mapper;
+        }
+
+        [HttpGet("token-decode")]
+        public IActionResult GetUserInfo()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var username = User.FindFirstValue(ClaimTypes.Name);
+
+            return Ok(new
+            {
+                UserId = userId,
+                Email = email,
+                Username = username
+            });
         }
 
         [HttpGet]
@@ -57,12 +73,12 @@ namespace ToDo_WebApi__Presentation_.Controllers
             var existingUser = await _userService.GetUserByUsernameAsync(userCreateDto.Username);
             if (existingUser != null)
             {
-                return Conflict("A user with the same username already exists.");
+                return Conflict(new GenResDto { Message = "Username already exists. Please try another one." });
             }
 
             var user = _mapper.Map<User>(userCreateDto);
             await _userService.AddUserAsync(user);
-            return Ok(new { message = "User Created Successfully" });
+            return Ok(new GenResDto{ Message = "User Created Successfully" });
         }
 
         [HttpPut("{id}")]

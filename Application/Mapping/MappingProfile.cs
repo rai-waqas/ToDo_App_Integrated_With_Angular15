@@ -2,6 +2,7 @@
 using Core.Models;
 using Application.DTOs;
 using Task = Core.Models.Task;
+using Core.AuthDto;
 
 namespace Application.Mapping
 {
@@ -14,6 +15,7 @@ namespace Application.Mapping
             CreateMap<UserCreateDto, User>().ReverseMap();
             CreateMap<UserUpdateDto, User>().ReverseMap();
             CreateMap<TaskCreateDto, Task>().ReverseMap();
+            CreateMap<User, AuthResponseDto>().ReverseMap();
         }
     }
 }

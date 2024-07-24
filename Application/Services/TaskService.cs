@@ -1,6 +1,4 @@
 ﻿using Core.Interfaces;
-using Core.Models;
-using System.Collections.Generic;
 using Task = System.Threading.Tasks.Task;
 
 namespace Application.Services

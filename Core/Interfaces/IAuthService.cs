@@ -1,4 +1,5 @@
 ﻿using Core.AuthModels;
+
 namespace Core.Interfaces
 {
     public interface IAuthService

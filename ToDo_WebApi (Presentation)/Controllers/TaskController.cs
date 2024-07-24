@@ -2,7 +2,6 @@
 using AutoMapper;
 using Core.AuthModels;
 using Core.Interfaces;
-using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Task = Core.Models.Task;
 

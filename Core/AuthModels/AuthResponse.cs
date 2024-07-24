@@ -1,12 +1,11 @@
 ﻿
-
-using Core.Models;
+using Core.AuthDto;
 
 namespace Core.AuthModels
 {
     public class AuthResponse
     {
         public string Token { get; set; } = null!;
-        public int userId { get; set; } = -1;
+        public AuthResponseDto User { get; set; } = null!;
     }
 }
